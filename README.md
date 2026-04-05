@@ -1,8 +1,15 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a Next JS project of a web on which you can message each other with a freelance or an enterprise.
 
 ## Getting Started
 
-First, run the development server:
+First after cloning the project, install the dependencies::
+ 
+
+ ```bash
+ npm install 
+ ```
+
+Then run the development server:
 
 ```bash
 npm run dev
@@ -14,9 +21,22 @@ pnpm dev
 bun dev
 ```
 
+Also run the json-server to see the result with mocking data:
+
+```bash
+npm serve 
+```
+
+Included functionnalities:
+- Login and register (simulated)
+- Edit one's profil
+- Profiling a user 
+- Messaging a user
+- Edit, delete a message
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
@@ -26,6 +46,9 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+## Usefull hints 
+
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
