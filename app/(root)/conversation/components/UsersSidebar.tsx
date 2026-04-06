@@ -11,8 +11,10 @@ import { useEffect, useRef, useState } from "react";
 export const UsersSidebar:React.FC<{redirectPath:string}> = ({redirectPath}) => {
     const ref = useRef<HTMLDivElement>(null);
     const [users, setUsers] = useState<User[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(()=>{
+       setUserId(localStorage.getItem('userId'));
       const getConversations = async () => { 
         await asyncFetch(`${API_URL}/users`).then( (data:User[])=> setUsers(data));
       }
@@ -29,7 +31,7 @@ export const UsersSidebar:React.FC<{redirectPath:string}> = ({redirectPath}) => 
     }
 
     return <div 
-      className="h-screen fixed z-2 right-0 p-10 pb-0 w-1/4 bg-white top-0 shadow-2xs border-[0.5px] grid grid-rows-[5%_95%]" 
+      className="h-screen fixed z-2 right-0 p-10 pb-0 w-1/4 bg-white top-0 shadow-2xs border-[0.5px] grid grid-rows-[5%_95%] " 
       ref={ref} 
       id="conversationBar"
     >
@@ -44,7 +46,8 @@ export const UsersSidebar:React.FC<{redirectPath:string}> = ({redirectPath}) => 
 
           <div className="mt-5 overflow-y-scroll no-scrollbar">
             
-              {users.map((user, index)=> <div onClick={()=> handleOnclick(redirectPath,user.id)} key={index} className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center gap-3">
+              {users.map((user, index)=> user.id !== userId && (
+               <div onClick={()=> handleOnclick(redirectPath,user.id)} key={index} className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center gap-3">
 
               <div className="rounded-full p-3 w-12 h-12 text-center bg-gray-200 font-bold">  {user.firstname[0].toUpperCase() + user.lastname[0].toUpperCase()}
               </div>
@@ -52,7 +55,7 @@ export const UsersSidebar:React.FC<{redirectPath:string}> = ({redirectPath}) => 
                 <p className="font-medium">{`${user.firstname} ${user.lastname}`}</p>
                 
               </div>
-            </div>)}
+            </div>))}
             
           </div>
         </div>

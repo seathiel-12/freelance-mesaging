@@ -53,8 +53,13 @@ const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
         setOtherUser(otherUserData)
 
         //Fetch messages for this conversation
-        const messages = await asyncFetch(`${API_URL}/messages?sender=${currentUserId}&receiver=${conversationId}`)
-
+        const messages = await Promise.resolve().then(async () => {
+          return asyncFetch(`${API_URL}/messages?sender=${currentUserId}&receiver=${conversationId}`)
+        }).then(async (sentMessages: Message[]) => {
+          return asyncFetch(`${API_URL}/messages?sender=${conversationId}&receiver=${currentUserId}`).then((receivedMessages: Message[]) => {
+            return [...sentMessages, ...receivedMessages]})
+        })
+        
         setMessages(messages)
 
       } catch (err) {

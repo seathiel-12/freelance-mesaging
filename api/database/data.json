@@ -160,20 +160,18 @@
       "updatedAt": "2024-03-12T14:00:00.000Z"
     },
     {
-      "id": "11",
-      "email": "chloe.michel@example.com",
       "firstname": "Chloé",
       "lastname": "Michel",
       "status": "FREELANCE",
-      "vision": "Concevoir des produits digitaux qui allient esthétique, performance et accessibilité",
-      "about": "Product Designer freelance. J'accompagne les startups dans la création de leur MVP.",
+      "vision": "Concevoir des produits digitaux qui allient esthétique, performance et accessibilité nope",
+      "about": "Product Designer freelance. J'accompagne les startups dans la création de leur MVP. Avec des projets deja realise.",
+      "enterpriseName": "Lawer",
       "github": "https://github.com/chloe-michel",
       "linkedin": "https://linkedin.com/in/chloe-michel",
       "website": "https://chloemichel.design",
-      "role": "USER",
-      "isVerified": true,
-      "createdAt": "2024-03-18T09:30:00.000Z",
-      "updatedAt": "2024-03-20T11:00:00.000Z"
+      "cv": "",
+      "members": null,
+      "id": "11"
     },
     {
       "id": "12",
@@ -664,6 +662,33 @@
       "isEdited": false,
       "createdAt": "2026-04-05T09:58:53.437Z",
       "updatedAt": "2026-04-05T09:58:53.437Z"
+    },
+    {
+      "id": "ep1vPohc0Bo",
+      "sender": "1",
+      "receiver": "1",
+      "content": "Je suis la.",
+      "isEdited": false,
+      "createdAt": "2026-04-06T10:10:10.743Z",
+      "updatedAt": "2026-04-06T10:10:10.743Z"
+    },
+    {
+      "id": "wJGeO1F0Wv8",
+      "sender": "1",
+      "receiver": "2",
+      "content": "Yo",
+      "isEdited": false,
+      "createdAt": "2026-04-06T10:23:18.802Z",
+      "updatedAt": "2026-04-06T10:23:18.802Z"
+    },
+    {
+      "id": "1Ur8Z7kqw4k",
+      "sender": "1",
+      "receiver": "2",
+      "content": "yo",
+      "isEdited": false,
+      "createdAt": "2026-04-06T15:06:04.492Z",
+      "updatedAt": "2026-04-06T15:06:04.492Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -1,7 +1,6 @@
 import useNotificationManager from "../components/Notification/hooks/useNotificationManager";
 
 export const asyncFetch = async (url: string, method?: string , body?: object) => {
-    const {notify}= useNotificationManager();
     try {
         if(!method) {
             method = 'GET';
@@ -22,14 +21,12 @@ export const asyncFetch = async (url: string, method?: string , body?: object) =
         };
         const responseFetched = await fetch(url, options)
         if (!responseFetched.ok) {
-            notify(`Failed to get the requested data at 
-                ${url}: Error ${responseFetched.status}.`, 'error')
             throw new Error(`HTTP error! status: ${responseFetched.status}`);
         }
         const response = await responseFetched.json();
         return response;
     } catch (error) {
-        notify(`Error getting the data: ${error}.`, 'error')
+        console.log(`Error getting the data: ${error}.`);
         throw error;
     }
 }
