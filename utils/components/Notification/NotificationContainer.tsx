@@ -1,3 +1,4 @@
+'use client'
 import type { FC } from 'react'
 import NotificationPortal from './NotificationPortal'
 import NotificationToast from './NotificationToast'

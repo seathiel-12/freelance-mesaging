@@ -6,16 +6,14 @@ export const useLogin= ()=> {
         try {
             localStorage.setItem('userId', data.id);
             redirect('/dashboard');
-            console.log(data.id)
         }catch (error) {
             console.error('Error storing user data:', error);
         }
-
     }
     function checkAuth(){    
-          if(!localStorage.getItem('userId')){
+        if(!localStorage.getItem('userId')){
             redirect('/auth/login');
-          }
+        }
     }
     const logout = ()=>{
         localStorage.removeItem('userId');

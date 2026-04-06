@@ -7,7 +7,7 @@ const Dashboard = () => {
   
   return (
     <div>
-        <div className='flex gap-10 justify-center'>
+        <div className='grid grid-cols-[28%_28%_28%] gap-10 justify-center overflow-y-scroll h-(--main-height) pb-10 relative'>
             <Timeline/>
             <Payment/>
             <Informations/>

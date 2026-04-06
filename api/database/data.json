@@ -6,7 +6,7 @@
       "status": "FREELANCE",
       "vision": "Créer des applications web modernes et intuitives qui améliorent l'expérience utilisateur",
       "about": "Développeuse Full Stack passionnée par React et Node.js. J'aime créer des applications web modernes et intuitives.",
-      "enterpriseName": "",
+      "enterpriseName": "argon",
       "github": "https://github.com/alice-dubois",
       "linkedin": "https://linkedin.com/in/alice-dubois",
       "website": "https://alice-dubois.dev",
@@ -665,5 +665,6 @@
       "createdAt": "2026-04-05T09:58:53.437Z",
       "updatedAt": "2026-04-05T09:58:53.437Z"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

@@ -1,3 +1,4 @@
+'use client'
 import { CircleCheck, CircleX, TriangleAlert, X, type LucideProps} from "lucide-react";
 import type { FC, ForwardRefExoticComponent, RefAttributes } from "react"
 import './NotificationToast.css'

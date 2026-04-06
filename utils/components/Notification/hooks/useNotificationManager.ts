@@ -1,3 +1,4 @@
+'use client'
 import { useContext } from 'react'
 import type { NotificationProps, NotificationType } from '../NotificationToast'
 import { NotificationContext } from '../NotificationProvider'
@@ -9,10 +10,12 @@ export interface NotificationManager {
 }
 
 const useNotificationManager = () => {
-    const context = useContext(NotificationContext);
+    const context = useContext<NotificationManager | undefined>(NotificationContext);
     if(context === undefined)
         throw new Error("Context is required!")
-  return context
+  
+    return context
+
 }
 
 export default useNotificationManager

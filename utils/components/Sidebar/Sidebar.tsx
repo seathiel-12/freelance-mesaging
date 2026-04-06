@@ -1,5 +1,6 @@
 import { Activity, FolderKanban, MessageSquareIcon, Settings, User, Wallet } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const onglets = [
     {
@@ -19,7 +20,11 @@ const onglets = [
     }
 ]
 
+
 const Sidebar: React.FC<{isFull:boolean}> = ({isFull}) => {
+
+    const pathname = usePathname();
+
   return (
     <aside className='border-r border-r-gray-300 h-screen py-5 max-w-65'>
         {isFull ? (
@@ -32,7 +37,7 @@ const Sidebar: React.FC<{isFull:boolean}> = ({isFull}) => {
                 <small className='text-gray-500'>NAVIGATION</small>
 
                 <ul className='my-2'>
-                    {onglets.map(({name, Icon, redirectTo}, index)=> <Link key={index} href={redirectTo} className={'w-50 flex items-center gap-2 p-2 rounded-xl hover:bg-gray-200 my-1 ' + (!index ? 'bg-gray-200' : '')}><Icon width={20}/><span>{name}</span></Link>)}
+                    {onglets.map(({name, Icon, redirectTo}, index)=> <Link key={index} href={redirectTo} className={'w-50 flex items-center gap-2 p-2 rounded-xl hover:bg-gray-200 my-1 ' + (pathname.includes(redirectTo) ? 'bg-gray-200' : '')}><Icon width={20}/><span>{name}</span></Link>)}
                 </ul>
             </div>
         ) : (
@@ -40,7 +45,7 @@ const Sidebar: React.FC<{isFull:boolean}> = ({isFull}) => {
                 <p className='font-semibold rounded-2xl px-4 py-2 bg-foreground text-white w-max'>F</p>
 
                 <ul className='my-2'>
-                    {onglets.map(({name, Icon, redirectTo}, index)=> <div key={index} className='flex items-center justify-center rounded-xl hover:bg-gray-200'><Link className='p-2 w-max' href={redirectTo}><Icon width={20}/></Link></div> )}   
+                    {onglets.map(({Icon, redirectTo}, index)=> <div key={index} className='flex items-center justify-center rounded-xl hover:bg-gray-200'><Link className='p-2 w-max' href={redirectTo}><Icon width={20}/></Link></div> )}   
                 </ul>
             </div>
         )}

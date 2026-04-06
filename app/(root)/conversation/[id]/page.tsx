@@ -6,7 +6,7 @@ import { type User, type Message, MessageType } from '@/api/database/types'
 import { Send } from 'lucide-react'
 import { API_URL } from '@/api/config/starter'
 import { asyncFetch } from '@/utils/functions/asyncFetch'
-import useNotify from '@/utils/components/Notification/hooks/useNotify'
+import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager'
 
 const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [conversationId, setConversationId] = useState<string>('')
@@ -19,7 +19,7 @@ const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [sending, setSending] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const {notify} = useNotify();
+  const {notify} = useNotificationManager();
 
   useEffect(() => {
     const getParams = async () => {

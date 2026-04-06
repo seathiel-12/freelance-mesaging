@@ -20,7 +20,7 @@ import type { EditUserFormData, ProfilProps } from '../types'
 import type { User as UserProps } from '@/api/database/types'
 import { API_URL } from '@/api/config/starter'
 import { asyncFetch } from '@/utils/functions/asyncFetch'
-import useNotify from '@/utils/components/Notification/hooks/useNotify'
+import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager'
 
 
 
@@ -32,7 +32,7 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [formData, setFormData] = useState<EditUserFormData>({})
   const [isSaving, setIsSaving] = useState(false)
-  const {notify} = useNotify()
+  const {notify} = useNotificationManager()
   
   useEffect(() => {
     const getParams = async () => {
@@ -252,7 +252,7 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
                 )}
                 {user.cv && (
                   <a
-                    href={user.cv}
+                    href={''}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors group"

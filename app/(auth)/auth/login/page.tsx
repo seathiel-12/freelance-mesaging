@@ -10,15 +10,19 @@ import Image from 'next/image';
 import { asyncFetch } from '@/utils/functions/asyncFetch';
 import { API_URL } from '@/api/config/starter';
 import { useLogin } from '../hooks/useLogin';
+import { User } from '@/api/database/types';
+import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager';
+import { redirect } from 'next/navigation';
 
 
 function LoginForm() {
     const {login} = useLogin();
+    const {notify} = useNotificationManager();
     const emailProps = {
         type: 'email',
         label: 'Email',
         placeholder: 'traveler@example.com',
-        Icon: Mail,
+        Icon: Mail
     }
 
     const passwordProps = {
@@ -33,11 +37,14 @@ function LoginForm() {
     });
 
     const onSubmit = async (loginData: LoginProps)=> {
-        const data = await asyncFetch(`${API_URL}/users?email=${loginData.email}&password=${loginData.password}`);
-        console.log(Object.keys(data[0]));
-        
+        const data: User[] = await asyncFetch(`${API_URL}/users?email=${loginData.email}&password=${loginData.password}`);
+        if(!data.length){
+            notify('Email or password invalid', 'error', true);
+            return;
+        }
         if((Object.keys(data[0]).length > 0)){
             login(data[0]);
+            redirect('/dashboard')
         }
     } 
   return (

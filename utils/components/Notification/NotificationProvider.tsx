@@ -1,3 +1,4 @@
+'use client'
 import { createContext, useState, type FC, type ReactNode } from 'react';
 import type { NotificationProps } from "./NotificationToast";
 import useNotification from "./hooks/useNotification";

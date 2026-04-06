@@ -19,7 +19,10 @@ const Surronder:React.FC<{children: ReactNode}> = ({children}) => {
           <PanelLeft width={22}/>
           </div>
           <div className='flex items-center gap-5'>
-            <button onClick={()=>logout()} className='font-medium cursor-pointer rounded-full py-2 px-4 shadow-2xs border-gray-300 bg-gray-200 hover:bg-gray-100 duration-200'>Log out</button>
+            <button onClick={()=>{
+              logout();
+              redirect('/auth/login')
+              }} className='font-medium cursor-pointer rounded-full py-2 px-4 shadow-2xs border-gray-300 bg-gray-200 hover:bg-gray-100 duration-200'>Log out</button>
             {(pathname.includes('conversation') || pathname.includes('profil') ) && <OpenConvButton/>}
           </div>
       </div>
