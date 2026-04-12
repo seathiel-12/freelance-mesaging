@@ -1,5 +1,4 @@
 
-
 export enum UserStatus {
   FREELANCE = 'FREELANCE',
   ENTERPRISE = 'ENTERPRISE',

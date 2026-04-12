@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { type User, type Message, MessageType } from '@/api/database/types'
+import { type User, type Message, MessageType } from '@/app/types'
 import { Send } from 'lucide-react'
 import { asyncFetch } from '@/utils/functions/asyncFetch'
 import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager'

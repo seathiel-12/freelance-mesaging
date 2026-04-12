@@ -8,7 +8,6 @@ import SelectField from '@/utils/components/SelectField/SelectField';
 import { asyncFetch } from '@/utils/functions/asyncFetch';
 import { redirect } from 'next/navigation';
 import { useLogin } from '../hooks/useLogin';
-import { API_URL } from '@/api/config/starter';
 
 function RegisterForm() {
   const {handleSubmit, control} = useForm<RegisterProps>({

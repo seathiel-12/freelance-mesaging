@@ -1,4 +1,4 @@
-import { User } from "@/api/database/types";
+import { User } from "@/app/types";
 import { redirect } from "next/navigation";
 
 export const useLogin= ()=> {

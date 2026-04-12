@@ -1,6 +1,6 @@
 'use client'
 
-import { User as UserType} from "@/api/database/types";
+import { User as UserType} from "@/app/types";
 import { slideIntoView } from "@/utils/functions/animations";
 import { asyncFetch } from "@/utils/functions/asyncFetch";
 import {  User, X } from "lucide-react";

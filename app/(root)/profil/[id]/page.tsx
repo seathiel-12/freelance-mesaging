@@ -17,7 +17,7 @@ import {
   TriangleAlert
 } from 'lucide-react'
 import type { EditUserFormData, ProfilProps } from '../types'
-import type { User as UserProps } from '@/api/database/types'
+import type { User as UserProps } from '@/app/types'
 import { asyncFetch } from '@/utils/functions/asyncFetch'
 import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager'
 

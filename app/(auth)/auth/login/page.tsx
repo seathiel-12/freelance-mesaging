@@ -9,7 +9,7 @@ import TextField from '@/utils/components/TextField/TextField';
 import Image from 'next/image';
 import { asyncFetch } from '@/utils/functions/asyncFetch';
 import { useLogin } from '../hooks/useLogin';
-import { User } from '@/api/database/types';
+import { User } from '@/app/types';
 import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager';
 import { redirect } from 'next/navigation';
 
