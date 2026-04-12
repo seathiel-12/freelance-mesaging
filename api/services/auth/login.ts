@@ -27,8 +27,8 @@ export const login = async (data: LoginDTO) => {
   return {
     id: user.id,
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    firstName: user.firstname,
+    lastName: user.lastname,
     status: user.status,
   };
 };

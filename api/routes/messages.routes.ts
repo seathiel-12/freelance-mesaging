@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 // SEND MESSAGE
-router.post("/", async (req, res) => {
+router.post("", async (req, res) => {
   try {
     const message = await sendMessage(req.body);
     res.status(201).json(message);
@@ -19,10 +19,11 @@ router.post("/", async (req, res) => {
 });
 
 // GET CONVERSATION
-router.get("/:user1Id/:user2Id", async (req, res) => {
+router.get("/:user/:withId", async (req, res) => {
   try {
-    const { user1Id, user2Id } = req.params;
-    const messages = await getConversation(user1Id, user2Id);
+    const { user, withId } = req.params;
+
+    const messages = await getConversation(withId, user);
     res.status(200).json(messages);
   } catch (err: any) {
     res.status(400).json({ error: err.message });

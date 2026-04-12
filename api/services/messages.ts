@@ -22,16 +22,22 @@ export const sendMessage = async (data: SendMessageDTO) => {
 };
 
 // READ (conversation between 2 users)
-export const getConversation = async (user1Id: string, user2Id: string) => {
-  return prisma.message.findMany({
+export const getConversation = async (withId: string, userId: string) => {
+  const userInfo = await prisma.user.findFirst({
+    where: {
+      id: withId,
+    },
+  });
+  const messages = await prisma.message.findMany({
     where: {
       OR: [
-        { senderId: user1Id, receiverId: user2Id },
-        { senderId: user2Id, receiverId: user1Id },
+        { senderId: withId, receiverId: userId },
+        { senderId: userId, receiverId: withId },
       ],
     },
     orderBy: { createdAt: "asc" },
-  });
+  })
+  return { messages, userInfo };
 };
 
 // UPDATE

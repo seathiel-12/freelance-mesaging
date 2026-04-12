@@ -18,7 +18,6 @@ import {
 } from 'lucide-react'
 import type { EditUserFormData, ProfilProps } from '../types'
 import type { User as UserProps } from '@/api/database/types'
-import { API_URL } from '@/api/config/starter'
 import { asyncFetch } from '@/utils/functions/asyncFetch'
 import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager'
 
@@ -48,19 +47,7 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
     const fetchUser = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`${API_URL}/users/${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!response.ok) {
-          console.log('Fetch user response:', response)
-          throw new Error('Failed to fetch user')
-        }
-
-        const data = await response.json()
-        console.log('Update user response:', data)
+        const data = await asyncFetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`);
 
         setUser(data)
         setFormData({
@@ -99,7 +86,7 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
   const handleSaveChanges = async () => {
     try {
       setIsSaving(true)
-      const data = await asyncFetch(`${API_URL}/users/${id}`, 'PUT', formData)
+      const data = await asyncFetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, 'PUT', formData)
 
       setUser(data)
       setIsModalOpen(false)
@@ -143,7 +130,7 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
 
   return (
     <div className="h-(--main-height) bg-gray-100 sm:px-6 lg:px-8 flex">
-      <div className="max-w-8xl mx-auto h-max py-20">
+      <div className="w-[80%] mx-auto h-max py-20">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
           <div className="bg-linear-to-r from-indigo-600 to-purple-600 px-8 py-12 relative">
@@ -179,24 +166,24 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
           {/* Left Column - About & Vision */}
           <div className="lg:col-span-2 space-y-8">
             {/* About Section */}
-            {user.about && (
+            {(
               <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
                 <div className="flex items-center gap-2 mb-4">
                   <Info className="text-indigo-600" size={24} />
                   <h2 className="text-2xl font-semibold text-gray-800">About Me</h2>
                 </div>
-                <p className="text-gray-600 leading-relaxed">{user.about}</p>
+                <p className="text-gray-600 leading-relaxed">{user.about ?? "Hi, I am a user."}</p>
               </div>
             )}
 
             {/* Vision Section */}
-            {user.vision && (
+            {(
               <div className="bg-linear-to-r from-indigo-50 to-purple-50 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
                 <div className="flex items-center gap-2 mb-4">
                   <Eye className="text-purple-600" size={24} />
                   <h2 className="text-2xl font-semibold text-gray-800">Vision</h2>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{user.vision}</p>
+                <p className="text-gray-700 leading-relaxed">{user.vision ?? 'No vision yet.'}</p>
               </div>
             )}
 
@@ -208,6 +195,7 @@ const Profil: React.FC<ProfilProps> = ({ params }) => {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">Contact & Social</h2>
               <div className="space-y-3">
+                {!(user.linkedin || user.github || user.cv) && <p>No media yet.</p>}
                 {user.github && (
                   <a
                     href={user.github}

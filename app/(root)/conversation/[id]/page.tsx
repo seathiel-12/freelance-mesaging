@@ -4,7 +4,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { type User, type Message, MessageType } from '@/api/database/types'
 import { Send } from 'lucide-react'
-import { API_URL } from '@/api/config/starter'
 import { asyncFetch } from '@/utils/functions/asyncFetch'
 import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager'
 
@@ -18,66 +17,58 @@ const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null)
+  const [editMode, setEditMode] = useState(false)
+  const [editContent, setEditContent] = useState('')
 
   const {notify} = useNotificationManager();
 
-  useEffect(() => {
-    const getParams = async () => {
-      const { id } = await params
-      setConversationId(id)
-    }
-    getParams()
-  }, [params]);
+ useEffect(() => {
+  const getParams = async ()=> {
+    const {id} = await params;
+    setConversationId(id)
+  }
+  getParams(); 
+}, [params])
 
-  useEffect(() => {
-    if (!conversationId) return;
+useEffect(() => {
+  if (!conversationId) return;
 
-    const fetchConversationData = async () => {
-      try {
-        setLoading(true)
+  const fetchConversationData = async () => {
+    try {
+      setLoading(true)
 
-        // Fetch current user id stored in localstorage 
-        const currentUserId = localStorage.getItem('userId')
-        if (!currentUserId) {
-          notify('User not authenticated', 'error', true);
-        }
-
-        // Fetch connected user details
-        const currentUserData = await asyncFetch(`${API_URL}/users/${currentUserId}`)
-
-         setCurrentUser(currentUserData)
-
-        // Fetch destinator details
-        const otherUserData = await asyncFetch(`${API_URL}/users/${conversationId}`);
-
-        setOtherUser(otherUserData)
-
-        //Fetch messages for this conversation
-        const messages = await Promise.resolve().then(async () => {
-          return asyncFetch(`${API_URL}/messages?sender=${currentUserId}&receiver=${conversationId}`)
-        }).then(async (sentMessages: Message[]) => {
-          return asyncFetch(`${API_URL}/messages?sender=${conversationId}&receiver=${currentUserId}`).then((receivedMessages: Message[]) => {
-            return [...sentMessages, ...receivedMessages]})
-        })
-        
-        setMessages(messages)
-
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load conversation')
-      } finally {
-        setLoading(false)
+      const userData = JSON.parse(localStorage.getItem('user') as string)
+      if (!userData) {
+        notify('User not authenticated', 'error', true)
+        return
       }
+
+      setCurrentUser(userData)
+      const res = await asyncFetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/messages/${userData.id}/${conversationId}`
+      )      
+
+      if (res) {
+        setMessages(res.messages)
+        setOtherUser(res.userInfo)
+      }
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load conversation')
+    } finally {
+      setLoading(false)
     }
+  }
+  fetchConversationData()
+}, [conversationId]) 
 
-    fetchConversationData()
-  }, [conversationId, API_URL])
 
-  const scrollToBottom = () => {
+  useEffect(() => {
+      const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
-
-  useEffect(() => {
-    scrollToBottom();
+scrollToBottom();
   }, [messages])
 
   const handleSendMessage = async () => {
@@ -88,15 +79,15 @@ const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
       const tempMessage: Message = {
         id: Date.now().toString(),
-        sender: currentUser.id,
-        receiver: otherUser.id,
+        senderId: currentUser.id,
+        receiverId: otherUser.id,
         content: newMessage.trim(),
         isEdited: false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }
 
-      await asyncFetch(`${API_URL}/messages`, 'POST', tempMessage)
+      await asyncFetch(`${process.env.NEXT_PUBLIC_API_URL}/messages`, 'POST', tempMessage)
 
       setMessages(prev => [...prev, tempMessage])
       setNewMessage('')
@@ -108,6 +99,49 @@ const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   }
 
+  const handleEditMessage = async (id: string) => {
+  try {
+    const res = await asyncFetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/messages/${id}`,
+      'PATCH',
+      { content: editContent }
+    )
+
+    if (!res) throw new Error()
+
+    setMessages(prev =>
+      prev.map(m =>
+        m.id === id ? { ...m, content: editContent, isEdited: true } : m
+      )
+    )
+
+    setSelectedMessageId(null)
+    setEditMode(false)
+    notify('Message modifié', 'success')
+
+  } catch (err) {
+    notify('Erreur lors de la modification', 'error')
+  }
+}
+
+const handleDeleteMessage = async (id: string) => {
+  try {
+    const res = await asyncFetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/messages/${id}`,
+      'DELETE'
+    )
+
+    if (!res) throw new Error()
+
+    setMessages(prev => prev.filter(m => m.id !== id))
+    setSelectedMessageId(null)
+
+    notify('Message supprimé', 'success')
+
+  } catch (err) {
+    notify('Erreur lors de la suppression', 'error')
+  }
+}
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -169,27 +203,86 @@ const ConversationPage = ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
         ) : (
           messages.map((message) => {
-            const isOwnMessage = message.sender === currentUser.id
+            const isOwnMessage = message.senderId === currentUser.id
             return (
-              <div
-                key={message.id}
-                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                    isOwnMessage
-                      ? 'bg-blue-600 text-white rounded-br-sm'
-                      : 'bg-white text-gray-900 rounded-bl-sm shadow-sm'
-                  }`}
-                >
-                  <p className="text-sm">{message.content}</p>
-                  <p className={`text-xs mt-1 ${isOwnMessage ? 'text-blue-100' : 'text-gray-500'}`}>
-                    {new Date(message.createdAt).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </p>
-                </div>
+              <div>
+                  <div
+                      key={message.id}
+                      onDoubleClick={() => {
+                        if (message.senderId !== currentUser.id) return
+                        setSelectedMessageId(message.id)
+                        setEditContent(message.content)
+                        setEditMode(false)
+                      }}
+                  className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+                    >
+                    <div
+                      className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl cursor-pointer hover:opacity-90 ${
+                        isOwnMessage
+                          ? 'bg-blue-600 text-white rounded-br-sm'
+                          : 'bg-white text-gray-900 rounded-bl-sm shadow-sm'
+                      }`}
+                    >
+                      {editMode && selectedMessageId === message.id ? (
+                            <div className="flex flex-col gap-2">
+                              <textarea
+                                value={editContent}
+                                onChange={(e) => setEditContent(e.target.value)}
+                                className="w-full px-2 py-1 text-sm border rounded"
+                              />
+
+                              <div className="flex gap-2">
+                                <button
+                                  className="text-xs text-green-100 hover:underline"
+                                  onClick={() => handleEditMessage(message.id)}
+                                >
+                                  Sauvegarder
+                                </button>
+
+                                <button
+                                  className="text-xs text-gray-600 hover:underline"
+                                  onClick={() => {
+                                    setEditMode(false)
+                                    setSelectedMessageId(null)
+                                  }}
+                                >
+                                  Annuler
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-sm">{message.content}</p>
+                          )}
+                      <p className={`text-xs mt-1 ${isOwnMessage ? 'text-blue-100' : 'text-gray-500'}`}>
+                        {new Date(message.createdAt).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+
+                  {selectedMessageId === message.id && message.senderId === currentUser.id && (
+                  <div className="gap-2 mt-1 justify-end rounded-lg flex">
+                    {!editMode && (
+                      <div className='flex gap-2'>
+                        <button
+                          className="text-md text-blue-600 rounded-lg px-3 py-1 bg-gray-200 cursor-pointer hover:bg-blue-300"
+                          onClick={() => setEditMode(true)}
+                        >
+                          Éditer
+                        </button>
+
+                        <button
+                          className="text-md text-red-600 lg px-3 py-1 bg-gray-200 rounded-lg cursor-pointer hover:bg-red-300"
+                          onClick={() => handleDeleteMessage(message.id)}
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )
           })

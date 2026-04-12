@@ -52,8 +52,8 @@ export interface Message {
   isEdited: boolean
   createdAt: Date | string
   updatedAt: Date | string
-  sender: User['id']
-  receiver: User['id']
+  senderId: User['id']
+  receiverId: User['id']
 }
 
 

@@ -48,8 +48,8 @@ export const register = async (data: RegisterDTO) => {
   return {
     id: user.id,
     email: user.email,
-    firstName: user.firstname,
-    lastName: user.lastname,
+    firstname: user.firstname,
+    lastname: user.lastname,
     status: user.status,
   };
 };

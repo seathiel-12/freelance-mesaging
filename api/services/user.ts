@@ -1,8 +1,8 @@
 import prisma from "../prisma/client.ts";
 
 interface UpdateUserDTO {
-  firstName?: string;
-  lastName?: string;
+  firstname?: string;
+  lastname?: string;
   vision?: string;
   about?: string;
   enterpriseName?: string;
@@ -32,8 +32,8 @@ export const getUserById = async (id: string) => {
     select: {
       id: true,
       email: true,
-      firstName: true,
-      lastName: true,
+      firstname: true,
+      lastname: true,
       status: true,
       vision: true,
       about: true,

@@ -23,7 +23,8 @@ export const asyncFetch = async (url: string, method?: string , body?: object) =
         if (!responseFetched.ok) {
             return null; // Return null for non-OK responses instead of throwing an error
         }
-        const response = await responseFetched.json();
+        const response = await responseFetched.json();       
+
         return response;
     } catch (error) {
         console.error(new Error(error instanceof Error ? error.message : 'An unknown error occurred'));
