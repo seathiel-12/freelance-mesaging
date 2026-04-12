@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  FREELANCE
+  ENTERPRISE
+}
+
+model User {
+  id             String      @id
+  email          String      @unique
+  firstname      String
+  lastname       String
+  status         UserStatus
+  password       String
+  vision         String?
+  about          String?
+  enterpriseName String?
+  github         String?
+  linkedin       String?
+  website        String?
+  cv             String?
+  members        Int?
+  isVerified     Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  // Relations
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+model Message {
+  id        String   @id
+  content   String
+  isEdited  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  senderId   String
+  receiverId String
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+}

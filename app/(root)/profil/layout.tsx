@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+  import { ReactNode } from "react"
 import { UsersSidebar } from "../conversation/components/UsersSidebar"
 
 const layout:React.FC<{children: ReactNode}> = ({children}) => {

@@ -32,7 +32,9 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "prisma/**/*.ts",
-    "api/messages/routes.js"  
-, "api/config/prisma/seed.ts"  ],
+    "api/**/*.ts",
+    "utils/**/*.ts",
+    "api/**/*.js",
+  ],
   "exclude": ["node_modules"]
 }

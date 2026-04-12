@@ -8,7 +8,6 @@ import Button from '@/utils/components/Button/Button';
 import TextField from '@/utils/components/TextField/TextField';
 import Image from 'next/image';
 import { asyncFetch } from '@/utils/functions/asyncFetch';
-import { API_URL } from '@/api/config/starter';
 import { useLogin } from '../hooks/useLogin';
 import { User } from '@/api/database/types';
 import useNotificationManager from '@/utils/components/Notification/hooks/useNotificationManager';
@@ -37,15 +36,16 @@ function LoginForm() {
     });
 
     const onSubmit = async (loginData: LoginProps)=> {
-        const data: User[] = await asyncFetch(`${API_URL}/users?email=${loginData.email}&password=${loginData.password}`);
-        if(!data.length){
-            notify('Email or password invalid', 'error', true);
+        const data: User = await asyncFetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, 'POST', loginData);
+        console.log(data);
+        if(!data){
+            notify('Email or password invalid', 'error');
             return;
         }
-        if((Object.keys(data[0]).length > 0)){
-            login(data[0]);
-            redirect('/dashboard')
-        }
+       
+        login(data);
+        redirect('/dashboard')
+        
     } 
   return (
     <form onSubmit={handleSubmit(onSubmit, (err)=>console.log(err))} className='m-auto rounded-2xl mt-5 bg-white shadow-lg p-8'>

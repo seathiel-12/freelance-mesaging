@@ -29,7 +29,7 @@ const AuthLayout: React.FC<{children:ReactNode}> = ({children}) => {
           <div className='w-125 mt-40 m-auto'>
               <Tab options={['Login', 'Register']} onclick={(e)=> {
                   redirect((e.currentTarget.id  === 'Login' ? '/auth/login' : '/auth/register'))
-                  }} current={pathname.includes('login') ? 'login' : 'register'} />
+                  }} current={pathname.includes('login') ? 'Login' : 'Register'} />
                 {children}              
           </div>   
       </div>

@@ -19,7 +19,7 @@ function RegisterForm() {
   const {login} = useLogin();
   const onSubmit = async (registerData:RegisterProps)=>{
     
-    const data = await asyncFetch(`${API_URL}/users`, 'POST', registerData);
+    const data = await asyncFetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, 'POST', registerData);
     if(data){
         login(data);
         redirect('/dashboard');

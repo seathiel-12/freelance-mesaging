@@ -8,8 +8,9 @@ interface NotificationPortalProps{
 const NotificationPortal:FC<NotificationPortalProps> = ( {children} ) => {
     const [notificationRoot, setNotificationRoot] = useState<HTMLElement | null>(null);
     useEffect(()=>{
-        setNotificationRoot(document.getElementById('notification-root'));
-        if(!notificationRoot){
+        const root = document.getElementById('notification-root');
+        setNotificationRoot(root);
+        if(!root){
             console.warn("Notification root manquant pour l'affichage!")
             return 
         }

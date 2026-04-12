@@ -1,6 +1,5 @@
 'use client'
 
-import { API_URL } from "@/api/config/starter";
 import { User } from "@/api/database/types";
 import { slideIntoView } from "@/utils/functions/animations";
 import { asyncFetch } from "@/utils/functions/asyncFetch";
@@ -16,7 +15,7 @@ export const UsersSidebar:React.FC<{redirectPath:string}> = ({redirectPath}) => 
     useEffect(()=>{
        setUserId(localStorage.getItem('userId'));
       const getConversations = async () => { 
-        await asyncFetch(`${API_URL}/users`).then( (data:User[])=> setUsers(data));
+        await asyncFetch(`${process.env.NEXT_PUBLIC_API_URL}/users`).then( (data:User[])=> setUsers(data));
       }
       getConversations();
       if(ref.current)
@@ -47,7 +46,7 @@ export const UsersSidebar:React.FC<{redirectPath:string}> = ({redirectPath}) => 
           <div className="mt-5 overflow-y-scroll no-scrollbar">
             
               {users.map((user, index)=> user.id !== userId && (
-               <div onClick={()=> handleOnclick(redirectPath,user.id)} key={index} className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center gap-3">
+               <div onClick={()=> handleOnclick(redirectPath, user.id)} key={index} className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center gap-3">
 
               <div className="rounded-full p-3 w-12 h-12 text-center bg-gray-200 font-bold">  {user.firstname[0].toUpperCase() + user.lastname[0].toUpperCase()}
               </div>
